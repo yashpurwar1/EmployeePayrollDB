@@ -51,6 +51,14 @@ public class EmployeePayrollDBService {
     }
 
     /**
+     * Purpose : Update the salary in the DB using PreparedStatement Interface
+     */
+
+    public int updateEmployeeDataPreparedStatement(String name, double salary) throws EmployeePayrollException {
+        return this.updateEmployeeDataUsingPreparedStatement(name,salary);
+    }
+
+    /**
      * Purpose : Create connection with the database
      */
     private Connection getConnection() throws SQLException {
@@ -74,6 +82,22 @@ public class EmployeePayrollDBService {
             return statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new EmployeePayrollException("Please check the updateEmployeeDataUsingStatement() for detailed information!");
+        }
+    }
+
+    /**
+     * Purpose : Update the salary in the DB using PreparedStatement Interface
+     */
+    private int updateEmployeeDataUsingPreparedStatement(String name, double salary) throws EmployeePayrollException {
+        String sql = "UPDATE employee_payroll SET salary = ? WHERE name = ?";
+        try (Connection connection = this.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDouble(1, salary);
+            statement.setString(2, name);
+
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new EmployeePayrollException("Please check the updateEmployeeDataUsingPreparedStatement() for detailed information!");
         }
     }
 
